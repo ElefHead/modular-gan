@@ -7,7 +7,7 @@ from gan.jobs import train_model
 
 DEFAULT_TRAIN_ARGS = {
     'batch_size': 32,
-    'epochs': 2,
+    'epochs': 10,
     'dataset': "mnist",
     'latent_dim': 100,
     'buffer_size': 60000
@@ -42,8 +42,7 @@ def _parse_args():
 
 
 def run_training(config: Dict = DEFAULT_TRAIN_ARGS, save_weights: bool = True):
-    generator, discriminator = train_model(**config)
-
+    train_model(**config)
 
 if __name__ == "__main__":
     args = _parse_args()

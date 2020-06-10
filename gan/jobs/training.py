@@ -7,6 +7,7 @@ from gan.networks import GAN, Generator, Discriminator
 from gan.datasets import load_dataset
 
 from pathlib import Path 
+from datetime import datetime
 
 def loss_fn(labels, output):
     return keras.losses.BinaryCrossentropy(from_logits=True)(labels, output)
@@ -31,6 +32,7 @@ def train_model(
     batch_size: int, 
     latent_dim: int,
     data_save_path: str = None,
+    save_models: bool = True
     ) -> (Model, Model) :
 
     setup()
@@ -46,12 +48,23 @@ def train_model(
     discriminator = Discriminator()
     generator = Generator()
     gan = GAN(discriminator, generator)
-
     gan.compile(discriminator_optimizer, generator_optimizer, loss_fn, latent_dim)
 
-    _history  = gan.fit(train_dataset, epochs=epochs)
+    gan_home_path = Path(__file__).parent.parent.absolute()
+
+    if save_models:
+        current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+        checkpoint_filepath = str( gan_home_path / "checkpoints" / current_time / "checkpoint_") 
+        model_checkpoint_callback = ModelCheckpoint(filepath=checkpoint_filepath)
+        _history  = gan.fit(train_dataset, epochs=epochs, callbacks=[model_checkpoint_callback])
+    else: 
+        _history  = gan.fit(train_dataset, epochs=epochs)
 
     generator.summary()
     discriminator.summary()
+
+    if save_models:
+        generator.save(gan_home_path / "saved_models" / current_time / "generator", save_format="tf")
+        discriminator.save(gan_home_path / "saved_models" / current_time / "discriminator", save_format="tf")
 
     return generator, discriminator

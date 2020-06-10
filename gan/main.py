@@ -7,7 +7,7 @@ from gan.jobs import train_model
 
 DEFAULT_TRAIN_ARGS = {
     'batch_size': 32,
-    'epochs': 10,
+    'epochs': 2,
     'dataset': "mnist",
     'latent_dim': 100,
     'buffer_size': 60000

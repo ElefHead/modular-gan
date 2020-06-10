@@ -30,7 +30,7 @@ class GAN(keras.Model):
         labels += 0.05 * tf.random.uniform(tf.shape(labels))
         
         with tf.GradientTape() as tape:
-            predictions = self.discriminator(combined_images)
+            predictions = self.discriminator(combined_images, training=True)
             d_loss = self.loss_fn(labels, predictions)
             
         grads = tape.gradient(d_loss, self.discriminator.trainable_weights)

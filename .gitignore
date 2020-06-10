@@ -1,0 +1,7 @@
+.*
+*.log
+__pycache__
+saved_models
+checkpoints
+data
+.vscode

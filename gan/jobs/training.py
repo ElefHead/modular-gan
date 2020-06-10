@@ -51,14 +51,19 @@ def train_model(
     gan.compile(discriminator_optimizer, generator_optimizer, loss_fn, latent_dim)
 
     gan_home_path = Path(__file__).parent.parent.absolute()
+    current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+
+    callbacks = []
+    tensorboard_callback = TensorBoard(log_dir=str(gan_home_path / "logs" / current_time))
+
+    callbacks.append(tensorboard_callback)
 
     if save_models:
-        current_time = datetime.now().strftime("%Y%m%d%H%M%S")
         checkpoint_filepath = str( gan_home_path / "checkpoints" / current_time / "checkpoint_") 
         model_checkpoint_callback = ModelCheckpoint(filepath=checkpoint_filepath)
-        _history  = gan.fit(train_dataset, epochs=epochs, callbacks=[model_checkpoint_callback])
-    else: 
-        _history  = gan.fit(train_dataset, epochs=epochs)
+        callbacks.append(model_checkpoint_callback)
+    
+    _history  = gan.fit(train_dataset, epochs=epochs, callbacks=callbacks)
 
     generator.summary()
     discriminator.summary()

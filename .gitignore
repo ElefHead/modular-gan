@@ -5,3 +5,4 @@ saved_models
 checkpoints
 data
 .vscode
+logs

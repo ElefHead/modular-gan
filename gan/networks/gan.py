@@ -16,6 +16,7 @@ class GAN(keras.Model):
         self.loss_fn = loss_fn
         self.latent_dim = latent_dim
     
+    @tf.function
     def train_step(self, data):
         real_images = data
         batch_size = tf.shape(real_images)[0]

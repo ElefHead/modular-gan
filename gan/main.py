@@ -32,18 +32,18 @@ def _parse_args():
         type=str,
         help="If set to train, training job will be run"
     )
+
+    parser.add_argument(
+        "--save", 
+        default=True, 
+        action='store_true',
+        help="If set to true, model and intermediate checkpoints will be saved"
+    )
     
     parser.add_argument(
         "experiment_config",
         type=str,
         help="Experiment JSON ('{\"dataset\": \"MNIST\", \"model\": \"model_name\", \"generator_network\": \"cnn\"}'"
-    )
-
-    parser.add_argument(
-        "--save", 
-        default=True, 
-        type=bool, 
-        help="If set to true, model and intermediate checkpoints will be saved"
     )
 
     args = parser.parse_args()

@@ -4,7 +4,7 @@ A DCGAN implemented with keras model subclassing.
 Implemented because I wanted to replicate [François Chollet's tweet](https://twitter.com/fchollet/status/1250622989541838848). 
 Uses MNIST dataset.
 
-## Usage 
+### Usage 
 To run training : 
 
 ```bash

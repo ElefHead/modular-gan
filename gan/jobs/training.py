@@ -6,24 +6,14 @@ from tensorflow.keras import Model
 from gan.networks import GAN, Generator, Discriminator
 from gan.datasets import load_dataset
 
+from .utils import setup
+
 from pathlib import Path 
 from datetime import datetime
 
+
 def loss_fn(labels, output):
     return keras.losses.BinaryCrossentropy(from_logits=True)(labels, output)
-
-def setup():
-    print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
-    tf.debugging.set_log_device_placement(False)
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    if gpus:
-        try:
-            for gpu in gpus:
-                tf.config.experimental.set_memory_growth(gpu, True)
-            logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-            print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
-        except RuntimeError as e:
-            print(e)
 
 def train_model(
     dataset: str,
@@ -59,7 +49,7 @@ def train_model(
     callbacks.append(tensorboard_callback)
 
     if save_models:
-        checkpoint_filepath = str( gan_home_path / "checkpoints" / current_time / "checkpoint_") 
+        checkpoint_filepath = str( gan_home_path / "checkpoints" / f"{dataset}{epochs}_{current_time}" / "checkpoint") 
         model_checkpoint_callback = ModelCheckpoint(filepath=checkpoint_filepath)
         callbacks.append(model_checkpoint_callback)
     
@@ -69,7 +59,7 @@ def train_model(
     discriminator.summary()
 
     if save_models:
-        generator.save(gan_home_path / "saved_models" / current_time / "generator", save_format="tf")
-        discriminator.save(gan_home_path / "saved_models" / current_time / "discriminator", save_format="tf")
+        generator.save(gan_home_path / "saved_models" / current_time / f"generator_{dataset}{epochs}", save_format="tf")
+        discriminator.save(gan_home_path / "saved_models" / current_time / f"discriminator_{dataset}{epochs}", save_format="tf")
 
     return generator, discriminator

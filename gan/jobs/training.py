@@ -37,8 +37,8 @@ def train_model(
 
     discriminator = Discriminator()
     generator = Generator()
-    gan = GAN(discriminator, generator)
-    gan.compile(discriminator_optimizer, generator_optimizer, loss_fn, latent_dim)
+    gan = GAN(discriminator, generator, latent_dim)
+    gan.compile(discriminator_optimizer, generator_optimizer, loss_fn)
 
     gan_home_path = Path(__file__).parent.parent.absolute()
     current_time = datetime.now().strftime("%Y%m%d%H%M%S")

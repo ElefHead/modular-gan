@@ -4,17 +4,17 @@ import tensorflow as tf
 from tensorflow import keras
 
 class GAN(keras.Model):
-    def __init__(self, discriminator, generator):
+    def __init__(self, discriminator, generator, latent_dim):
         super(GAN, self).__init__()
         self.discriminator = discriminator
         self.generator = generator 
+        self.latent_dim = latent_dim
         
-    def compile(self, d_optimizer, g_optimizer, loss_fn, latent_dim):
+    def compile(self, d_optimizer, g_optimizer, loss_fn):
         super(GAN, self).compile()
         self.d_optimizer = d_optimizer
         self.g_optimizer = g_optimizer
         self.loss_fn = loss_fn
-        self.latent_dim = latent_dim
     
     @tf.function
     def train_step(self, data):
